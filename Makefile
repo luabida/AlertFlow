@@ -1,27 +1,56 @@
 #* Variables
-SHELL:=/usr/bin/env bash
+SERVICES:=
+SERVICE:=
+CMD:=
 ARGS:=
-CONSOLE:=bash
-TIMEOUT:=180
+TIMEOUT:=90
+
+# https://github.com/containers/podman-compose/issues/491#issuecomment-1289944841
+CONTAINER_APP=docker compose \
+	--env-file=.env \
+	--file docker/compose.yaml
 
 include .env
 
-SERVICES=
+# -- Project --
+.PHONY: env
+env:
+	envsubst < env.tpl > .env
 
-COMPOSE=docker-compose \
-	--env-file .env \
-	--project-name AlertFlow \
-	--file docker/compose.yaml \
+.PHONY: linter
+linter:
+	pre-commit run --all-files --verbose
 
-
-.PHONY:containers-build
+# -- Docker --
 containers-build:
-	$(COMPOSE) build ${SERVICES}
+	set -e
+	$(CONTAINER_APP) build ${SERVICES}
 
-.PHONY:containers-start
 containers-start:
-	$(COMPOSE) up -d ${SERVICES}
+	set -ex
+	$(CONTAINER_APP) up --remove-orphans -d ${SERVICES}
 
-.PHONY:containers-stop
 containers-stop:
-	$(COMPOSE) down -v --remove-orphans 
+	set -ex
+	$(CONTAINER_APP) stop ${ARGS} ${SERVICES}
+
+containers-rm:
+	set -ex
+	$(CONTAINER_APP) rm ${ARGS} ${SERVICES}
+
+containers-restart: containers-stop containers-start
+
+containers-down:
+	$(CONTAINER_APP) down ${ARGS}
+
+containers-logs:
+	$(CONTAINER_APP) logs ${ARGS} ${SERVICES}
+
+containers-wait:
+	timeout ${TIMEOUT} docker/scripts/healthcheck.sh ${SERVICE}
+
+containers-wait-all:
+	$(MAKE) containers-wait SERVICE="scheduler"
+	$(MAKE) containers-wait SERVICE="triggerer"
+	$(MAKE) containers-wait SERVICE="webserver"
+	$(MAKE) containers-wait SERVICE="worker"

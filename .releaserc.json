@@ -2,32 +2,21 @@
     "branches": ["main"],
     "tagFormat": "${version}",
     "plugins": [
-      "@semantic-release/commit-analyzer",
+      [
+        "@semantic-release/commit-analyzer", {
+        "preset": "conventionalcommits"
+      }],
       [
         "@google/semantic-release-replace-plugin",
         {
           "replacements": [
             {
               "files": ["alertflow/__init__.py"],
-              "from": "return \".*\"  # changed by semantic-release",
-              "to": "return \"${nextRelease.version}\"  # changed by semantic-release",
+              "from": "return '.*'  # changed by semantic-release",
+              "to": "return '${nextRelease.version}'  # changed by semantic-release",
               "results": [
                 {
                   "file": "alertflow/__init__.py",
-                  "hasChanged": true,
-                  "numMatches": 1,
-                  "numReplacements": 1
-                }
-              ],
-              "countMatches": true
-            },
-            {
-              "files": ["pyproject.toml"],
-              "from": "version = \".*\"  # changed by semantic-release",
-              "to": "version = \"${nextRelease.version}\"  # changed by semantic-release",
-              "results": [
-                {
-                  "file": "pyproject.toml",
                   "hasChanged": true,
                   "numMatches": 1,
                   "numReplacements": 1
