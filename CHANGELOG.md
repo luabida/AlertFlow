@@ -1,6 +1,12 @@
 Release Notes
 ---
 
+## [2.1.0](https://github.com/AlertaDengue/AlertFlow/compare/2.0.0...2.1.0) (2026-06-17)
+
+### Features
+
+* include the vegetation metrics dag ([#47](https://github.com/AlertaDengue/AlertFlow/issues/47)) ([c637be7](https://github.com/AlertaDengue/AlertFlow/commit/c637be7cb2db9ada54a2cef2035588b10d79b3a0))
+
 ## [2.0.0](https://github.com/AlertaDengue/AlertFlow/compare/1.2.0...2.0.0) (2026-05-02)
 
 ### ⚠ BREAKING CHANGES
