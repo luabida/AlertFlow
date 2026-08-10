@@ -1,6 +1,8 @@
 Release Notes
 ---
 
+## [2.1.1](https://github.com/AlertaDengue/AlertFlow/compare/2.1.0...2.1.1) (2026-08-10)
+
 ## [2.1.0](https://github.com/AlertaDengue/AlertFlow/compare/2.0.0...2.1.0) (2026-06-17)
 
 ### Features
